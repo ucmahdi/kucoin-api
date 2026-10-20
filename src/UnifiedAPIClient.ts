@@ -531,15 +531,41 @@ export class UnifiedAPIClient extends BaseRestClient {
   /**
    * Modify Leverage Margin Cross (UTA)
    * Update leverage for a currency in UTA cross margin.
+   *
+   * @deprecated Use {@link modifyClassicMarginCrossLeverage} or {@link modifyUnifiedMarginCrossLeverage}.
    */
   modifyMarginCrossLeverage(
     params: ModifyMarginCrossLeverageRequestUTA,
     accountMode: 'classic' | 'unified' = 'unified',
   ): Promise<APISuccessResponse<ModifyMarginCrossLeverageResponseUTA>> {
+    if (accountMode === 'classic') {
+      return this.modifyClassicMarginCrossLeverage(params);
+    }
+    return this.modifyUnifiedMarginCrossLeverage(params);
+  }
+
+  /**
+   * Modify Classic Leverage Margin Cross
+   * Update cross-margin leverage on the classic account.
+   */
+  modifyClassicMarginCrossLeverage(
+    params: ModifyMarginCrossLeverageRequestUTA,
+  ): Promise<APISuccessResponse<ModifyMarginCrossLeverageResponseUTA>> {
     return this.postPrivate(
-      accountMode === 'classic'
-        ? 'api/ua/v1/classic/account/modify-leverage-margin-cross'
-        : 'api/ua/v2/unified/account/modify-leverage-margin-cross',
+      'api/ua/v1/classic/account/modify-leverage-margin-cross',
+      params,
+    );
+  }
+
+  /**
+   * Modify Unified Leverage Margin Cross
+   * Update cross-margin leverage on the unified account.
+   */
+  modifyUnifiedMarginCrossLeverage(
+    params: ModifyMarginCrossLeverageRequestUTA,
+  ): Promise<APISuccessResponse<ModifyMarginCrossLeverageResponseUTA>> {
+    return this.postPrivate(
+      'api/ua/v2/unified/account/modify-leverage-margin-cross',
       params,
     );
   }
@@ -791,17 +817,37 @@ export class UnifiedAPIClient extends BaseRestClient {
    * Note: timeInForce returns 'RPI' value for Futures RPI orders as of 2025.01.02.
    * Note: status changed from String to Number for UTA as of 2026.01.17.
    * Note: orderTime/updatedTime standardized to nanoseconds as of 2026.01.12.
+   *
+   * @deprecated Use {@link getClassicOrderDetails} or {@link getUnifiedOrderDetails}.
    */
   getOrderDetails(
     params: GetOrderDetailsRequestUTA,
     accountMode: 'classic' | 'unified' = 'unified',
   ): Promise<APISuccessResponse<OrderDetailsUTA>> {
-    return this.getPrivate(
-      accountMode === 'classic'
-        ? 'api/ua/v1/classic/order/detail'
-        : 'api/ua/v2/unified/order/detail',
-      params,
-    );
+    if (accountMode === 'classic') {
+      return this.getClassicOrderDetails(params);
+    }
+    return this.getUnifiedOrderDetails(params);
+  }
+
+  /**
+   * Get Classic Order Details
+   * Single order details on the classic account.
+   */
+  getClassicOrderDetails(
+    params: GetOrderDetailsRequestUTA,
+  ): Promise<APISuccessResponse<OrderDetailsUTA>> {
+    return this.getPrivate('api/ua/v1/classic/order/detail', params);
+  }
+
+  /**
+   * Get Unified Order Details
+   * Single order details on the unified account.
+   */
+  getUnifiedOrderDetails(
+    params: GetOrderDetailsRequestUTA,
+  ): Promise<APISuccessResponse<OrderDetailsUTA>> {
+    return this.getPrivate('api/ua/v2/unified/order/detail', params);
   }
 
   /**
@@ -810,17 +856,37 @@ export class UnifiedAPIClient extends BaseRestClient {
    * Note: timeInForce returns 'RPI' value for Futures RPI orders as of 2025.01.02.
    * Note: status changed from String to Number for UTA as of 2026.01.17.
    * Note: orderTime/updatedTime standardized to nanoseconds as of 2026.01.12.
+   *
+   * @deprecated Use {@link getClassicOpenOrderList} or {@link getUnifiedOpenOrderList}.
    */
   getOpenOrderList(
     params: GetOpenOrderListRequestUTA,
     accountMode: 'classic' | 'unified' = 'unified',
   ): Promise<APISuccessResponse<GetOpenOrderListResponseUTA>> {
-    return this.getPrivate(
-      accountMode === 'classic'
-        ? 'api/ua/v1/classic/order/open-list'
-        : 'api/ua/v2/unified/order/open-list',
-      params,
-    );
+    if (accountMode === 'classic') {
+      return this.getClassicOpenOrderList(params);
+    }
+    return this.getUnifiedOpenOrderList(params);
+  }
+
+  /**
+   * Get Classic Open Order List
+   * Open orders on the classic account.
+   */
+  getClassicOpenOrderList(
+    params: GetOpenOrderListRequestUTA,
+  ): Promise<APISuccessResponse<GetOpenOrderListResponseUTA>> {
+    return this.getPrivate('api/ua/v1/classic/order/open-list', params);
+  }
+
+  /**
+   * Get Unified Open Order List
+   * Open orders on the unified account.
+   */
+  getUnifiedOpenOrderList(
+    params: GetOpenOrderListRequestUTA,
+  ): Promise<APISuccessResponse<GetOpenOrderListResponseUTA>> {
+    return this.getPrivate('api/ua/v2/unified/order/open-list', params);
   }
 
   /**
@@ -829,17 +895,37 @@ export class UnifiedAPIClient extends BaseRestClient {
    * Note: timeInForce returns 'RPI' value for Futures RPI orders as of 2025.01.02.
    * Note: status changed from String to Number for UTA as of 2026.01.17.
    * Note: orderTime/updatedTime standardized to nanoseconds as of 2026.01.12.
+   *
+   * @deprecated Use {@link getClassicOrderHistory} or {@link getUnifiedOrderHistory}.
    */
   getOrderHistory(
     params: GetOrderHistoryRequestUTA,
     accountMode: 'classic' | 'unified' = 'unified',
   ): Promise<APISuccessResponse<GetOrderHistoryResponseUTA>> {
-    return this.getPrivate(
-      accountMode === 'classic'
-        ? 'api/ua/v1/classic/order/history'
-        : 'api/ua/v2/unified/order/history',
-      params,
-    );
+    if (accountMode === 'classic') {
+      return this.getClassicOrderHistory(params);
+    }
+    return this.getUnifiedOrderHistory(params);
+  }
+
+  /**
+   * Get Classic Order History
+   * Order history on the classic account.
+   */
+  getClassicOrderHistory(
+    params: GetOrderHistoryRequestUTA,
+  ): Promise<APISuccessResponse<GetOrderHistoryResponseUTA>> {
+    return this.getPrivate('api/ua/v1/classic/order/history', params);
+  }
+
+  /**
+   * Get Unified Order History
+   * Order history on the unified account.
+   */
+  getUnifiedOrderHistory(
+    params: GetOrderHistoryRequestUTA,
+  ): Promise<APISuccessResponse<GetOrderHistoryResponseUTA>> {
+    return this.getPrivate('api/ua/v2/unified/order/history', params);
   }
 
   /**
@@ -847,17 +933,37 @@ export class UnifiedAPIClient extends BaseRestClient {
    * This interface can be used for getting trade execution history.
    * Note: executionTime standardized to nanoseconds as of 2026.01.12.
    * Note: isRpiTrade added for Futures as of 2025.01.02.
+   *
+   * @deprecated Use {@link getClassicTradeHistory} or {@link getUnifiedTradeHistory}.
    */
   getTradeHistory(
     params: GetTradeHistoryRequestUTA,
     accountMode: 'classic' | 'unified' = 'unified',
   ): Promise<APISuccessResponse<GetTradeHistoryResponseUTA>> {
-    return this.getPrivate(
-      accountMode === 'classic'
-        ? 'api/ua/v1/classic/order/execution'
-        : 'api/ua/v2/unified/order/execution',
-      params,
-    );
+    if (accountMode === 'classic') {
+      return this.getClassicTradeHistory(params);
+    }
+    return this.getUnifiedTradeHistory(params);
+  }
+
+  /**
+   * Get Classic Trade History
+   * Trade execution history on the classic account.
+   */
+  getClassicTradeHistory(
+    params: GetTradeHistoryRequestUTA,
+  ): Promise<APISuccessResponse<GetTradeHistoryResponseUTA>> {
+    return this.getPrivate('api/ua/v1/classic/order/execution', params);
+  }
+
+  /**
+   * Get Unified Trade History
+   * Trade execution history on the unified account.
+   */
+  getUnifiedTradeHistory(
+    params: GetTradeHistoryRequestUTA,
+  ): Promise<APISuccessResponse<GetTradeHistoryResponseUTA>> {
+    return this.getPrivate('api/ua/v2/unified/order/execution', params);
   }
 
   /**
@@ -994,16 +1100,37 @@ export class UnifiedAPIClient extends BaseRestClient {
    * Get Account Position Tiers
    * Request account position tiers (risk limit) info.
    * Note: Currently only queries of classic - futures isolated margin are supported.
+   *
+   * @deprecated Use {@link getClassicAccountPositionTiers} or {@link getUnifiedAccountPositionTiers}.
    */
   getAccountPositionTiers(
     params: GetAccountPositionTiersRequestUTA,
     accountMode: 'classic' | 'unified' = 'classic',
   ): Promise<APISuccessResponse<PositionTierUTA[]>> {
-    return this.getPrivate(
-      accountMode === 'classic'
-        ? 'api/ua/v1/classic/position/tiers'
-        : 'api/ua/v2/unified/position/tiers',
-      params,
-    );
+    if (accountMode === 'classic') {
+      return this.getClassicAccountPositionTiers(params);
+    }
+    return this.getUnifiedAccountPositionTiers(params);
+  }
+
+  /**
+   * Get Classic Account Position Tiers
+   * Classic account position tiers (risk limit).
+   * Note: Currently only queries of classic - futures isolated margin are supported.
+   */
+  getClassicAccountPositionTiers(
+    params: GetAccountPositionTiersRequestUTA,
+  ): Promise<APISuccessResponse<PositionTierUTA[]>> {
+    return this.getPrivate('api/ua/v1/classic/position/tiers', params);
+  }
+
+  /**
+   * Get Unified Account Position Tiers
+   * Unified account position tiers (risk limit).
+   */
+  getUnifiedAccountPositionTiers(
+    params: GetAccountPositionTiersRequestUTA,
+  ): Promise<APISuccessResponse<PositionTierUTA[]>> {
+    return this.getPrivate('api/ua/v2/unified/position/tiers', params);
   }
 }

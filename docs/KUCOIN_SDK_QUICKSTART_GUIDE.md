@@ -1650,6 +1650,8 @@ Rate limits vary by product, permission, endpoint weight, account level, region,
 
 Retry temporary network failures and rate-limit responses with bounded exponential backoff and jitter. Do not blindly retry an order after an ambiguous timeout. Query by `clientOid` or reconcile current order state first.
 
+KuCoin answers a user-level limit, and a server-overload limit, with HTTP 429 and body code `429000` (`Too many requests`). The thrown error keeps that payload on `error.body`, so match `error.body.code === '429000'`. `error.code` is the HTTP status. When `gw-ratelimit-reset` is present it is milliseconds until the quota window resets: wait at least that long, then retry with jitter. Overload responses omit those headers, so back off and retry later.
+
 ### Use client-generated order IDs
 
 Set a unique `clientOid` on each application-owned order. Store it before sending the request. This gives retries, restarts, REST API queries, and stream updates a common identifier.
