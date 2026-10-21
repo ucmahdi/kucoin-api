@@ -6,7 +6,7 @@
 [![npm downloads](https://img.shields.io/npm/dt/kucoin-api)][1]
 [![last commit](https://img.shields.io/github/last-commit/sieblyio/kucoin-api)][1]
 [![Telegram](https://img.shields.io/badge/chat-on%20telegram-blue.svg)](https://t.me/nodetraders)
-[![Tutorial](https://img.shields.io/badge/Tutorial-siebly.io-blue)](https://siebly.io/sdk/kucoin/javascript/tutorial)
+[![KuCoin Tutorial](https://img.shields.io/badge/KuCoin%20Tutorial-siebly.io-blue)](https://siebly.io/sdk/kucoin/javascript/tutorial)
 
 <p align="center">
   <a href="https://www.npmjs.com/package/kucoin-api">
