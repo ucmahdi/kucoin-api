@@ -4,7 +4,7 @@ import { UnifiedAPIClient } from 'kucoin-api';
 
 // This example shows how to call this kucoin API endpoint with either node.js, javascript (js) or typescript (ts) with the npm module "kucoin-api" for kucoin exchange
 // This kucoin API SDK is available on npm via "npm install kucoin-api"
-// ENDPOINT: api/ua/v1/{accountMode}/position/tiers
+// ENDPOINT: api/ua/v1/classic/position/tiers
 // METHOD: GET
 // PUBLIC: NO
 

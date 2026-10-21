@@ -273,7 +273,7 @@ In the object, find the "multiplier" value.
 
 ```js
 // In your code, you can fetch it like this
-const symbolInfo = await client.getSymbol({ symbol: 'XRPUSDTM' });
+const symbolInfo = await futuresClient.getSymbol({ symbol: 'XRPUSDTM' });
 const multiplier = symbolInfo.data.multiplier;
 ```
 
@@ -304,7 +304,7 @@ Here are function examples using the Futures Create Order endpoint:
 
 ```js
 // A MARKET SHORT of 2 contracts of XBT using leverage of 5:
-const marketShort = futureTransfers.submitOrder({
+const marketShort = futuresClient.submitOrder({
   clientOid: '123456789',
   leverage: '5',
   side: 'sell',
@@ -319,7 +319,7 @@ const marketShort = futureTransfers.submitOrder({
 
 ```js
 // A MARKET LONG of 2 contracts of XBT using leverage of 5:
-const marketLong = futureTransfers.submitOrder({
+const marketLong = futuresClient.submitOrder({
   clientOid: '123456789',
   leverage: '5',
   side: 'buy',
@@ -334,7 +334,7 @@ const marketLong = futureTransfers.submitOrder({
 
 ```js
 // A LIMIT SHORT of 2 contracts of XBT using leverage of 5:
-const limitShort = futureTransfers.submitOrder({
+const limitShort = futuresClient.submitOrder({
   clientOid: '123456789',
   leverage: '5',
   price: '70300.31',
@@ -350,7 +350,7 @@ const limitShort = futureTransfers.submitOrder({
 
 ```js
 // A LIMIT LONG of 2 contracts of XBT using leverage of 5:
-const limitLong = futureTransfers.submitOrder({
+const limitLong = futuresClient.submitOrder({
   clientOid: '123456789',
   leverage: '5',
   price: '40300.31',
@@ -374,7 +374,7 @@ Side, Size and Leverage fields can be left empty and the system will determine t
 
 ```js
 // A MARKET CLOSE POSITION example:
-const marketClose = futureTransfers.submitOrder({
+const marketClose = futuresClient.submitOrder({
   clientOid: '123456789',
   closeOrder: true,
   symbol: 'XBTUSDTM',
@@ -389,7 +389,7 @@ const marketClose = futureTransfers.submitOrder({
 
 ```js
 // A LIMIT CLOSE of a LONG example:
-const limitCloseLong = futureTransfers.submitOrder({
+const limitCloseLong = futuresClient.submitOrder({
   clientOid: '123456789',
   leverage: '5',
   price: '70300.31',
@@ -402,7 +402,7 @@ const limitCloseLong = futureTransfers.submitOrder({
 });
 
 // A LIMIT CLOSE of a SHORT example:
-const limitCloseShort = futureTransfers.submitOrder({
+const limitCloseShort = futuresClient.submitOrder({
   clientOid: '123456789',
   leverage: '5',
   price: '40300.31',
@@ -419,7 +419,7 @@ const limitCloseShort = futureTransfers.submitOrder({
 
 ```js
 // A STOP LOSS example for a LONG position:
-const stopLossLong = futureTransfers.submitOrder({
+const stopLossLong = futuresClient.submitOrder({
   clientOid: '123456789',
   closeOrder: true,
   stop: 'down',
@@ -431,7 +431,7 @@ const stopLossLong = futureTransfers.submitOrder({
 });
 
 // A STOP LOSS example for a SHORT position:
-const stopLossShort = futureTransfers.submitOrder({
+const stopLossShort = futuresClient.submitOrder({
   clientOid: '123456789',
   closeOrder: true,
   stop: 'up',

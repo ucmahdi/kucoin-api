@@ -215,7 +215,7 @@ spotClient.getTransferable({
 
 // Example call to submit a transfer from master to sub-account
 spotClient.submitTransferMasterSub({
-  clientOid: client.generateNewOrderID(), // or use your custom UUID
+  clientOid: spotClient.generateNewOrderID(), // or use your custom UUID
   amount: 0.01,
   currency: 'USDT',
   direction: 'OUT', // 'IN' for transfer to master, 'OUT' for transfer to sub
@@ -224,7 +224,7 @@ spotClient.submitTransferMasterSub({
 
 // Example call to submit an inner transfer within same account
 spotClient.submitInnerTransfer({
-  clientOid: client.generateNewOrderID(), // or use your custom UUID
+  clientOid: spotClient.generateNewOrderID(), // or use your custom UUID
   amount: 0.01,
   currency: 'USDT',
   from: 'main', // Source account type
@@ -334,7 +334,7 @@ Please, read official [KuCoin API docs](https://www.kucoin.com/docs/rest/spot-tr
 ```js
 // Market short order
 const marketShort = spotClient.submitOrder({
-  clientOid: client.generateNewOrderID(), // or use your custom UUID
+  clientOid: spotClient.generateNewOrderID(), // or use your custom UUID
   side: 'sell',
   symbol: 'ETH-BTC',
   type: 'market',
@@ -347,7 +347,7 @@ const marketShort = spotClient.submitOrder({
 ```js
 // Market long order
 const marketLong = spotClient.submitOrder({
-  clientOid: client.generateNewOrderID(), // or use your custom UUID
+  clientOid: spotClient.generateNewOrderID(), // or use your custom UUID
   side: 'buy',
   symbol: 'ETH-BTC',
   type: 'market',
@@ -360,7 +360,7 @@ const marketLong = spotClient.submitOrder({
 ```js
 // Limit short order
 const limitShort = spotClient.submitOrder({
-  clientOid: client.generateNewOrderID(), // or use your custom UUID
+  clientOid: spotClient.generateNewOrderID(), // or use your custom UUID
   side: 'sell',
   symbol: 'ETH-BTC',
   type: 'limit',
@@ -375,7 +375,7 @@ const limitShort = spotClient.submitOrder({
 ```js
 // Limit long order
 const limitLong = spotClient.submitOrder({
-  clientOid: client.generateNewOrderID(), // or use your custom UUID
+  clientOid: spotClient.generateNewOrderID(), // or use your custom UUID
   side: 'buy',
   symbol: 'ETH-BTC',
   type: 'limit',
