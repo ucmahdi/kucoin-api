@@ -3,6 +3,7 @@ import type { ClientRequestArgs } from 'http';
 import WebSocket from 'isomorphic-ws';
 
 import { APIRegion, RestClientOptions } from '../../lib/requestUtils.js';
+import type { WsKey } from '../../lib/websocket/websocket-util.js';
 
 /** General configuration for the WebsocketClient */
 export interface WSClientConfigurableOptions {
@@ -65,6 +66,17 @@ export interface WSClientConfigurableOptions {
    * If you authenticated the WS API before, automatically try to re-authenticate the WS API if you're disconnected/reconnected for any reason.
    */
   reauthWSAPIOnReconnect?: boolean;
+
+  /**
+   * Optional filter applied to data pushes (`"type":"message"`) before they are parsed.
+   *
+   * Return `false` to drop the raw frame without JSON-parsing or emitting it, e.g. for
+   * symbols you do not track on an all-market topic such as `/market/ticker:all`.
+   * Parsing is the dominant per-message cost, so this saves CPU on busy topics.
+   *
+   * Control frames (welcome, ack, error, pong) never reach this filter.
+   */
+  dataMessageFilter?: (rawMessage: string, wsKey: WsKey) => boolean;
 }
 
 /**

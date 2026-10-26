@@ -45,6 +45,12 @@ function getRandomInt(max: number) {
 
 export const WS_LOGGER_CATEGORY = { category: 'kucoin-ws' };
 
+/** Longest frame still checked for a pong; KuCoin's pong is well under this. */
+const MAX_PONG_FRAME_LENGTH = 256;
+
+/** How far into a frame to look for its type before deciding it may be filtered. */
+const DATA_FRAME_HEAD_LENGTH = 256;
+
 export interface WSAPIRequestFlags {
   /** If true, will skip auth requirement for WS API connection */
   authIsOptional?: boolean | undefined;
@@ -497,13 +503,38 @@ export class WebsocketClient extends BaseWebsocketClient<WsKey> {
     return false;
   }
 
+  /**
+   * KuCoin's pong is a tiny frame (`{"id":"...","type":"pong","timestamp":...}`). Only
+   * frames that short are checked, so market-data pushes are never scanned end to end
+   * on every message, and a data push that happens to contain "pong" is not dropped.
+   */
   protected isWsPong(msg: any): boolean {
-    if (msg?.data?.includes('pong')) {
-      return true;
+    const data = msg?.data;
+    return (
+      typeof data === 'string' &&
+      data.length <= MAX_PONG_FRAME_LENGTH &&
+      data.includes('pong')
+    );
+  }
+
+  /**
+   * Applies `dataMessageFilter` to data pushes only. A frame whose type is not found near
+   * the start is never dropped, so an unexpected layout fails safe (it is parsed as usual).
+   */
+  protected isDiscardable(event: MessageEventLike, wsKey: WsKey): boolean {
+    const filter = this.options.dataMessageFilter;
+    if (!filter) {
+      return false;
     }
 
-    // this.logger.info(`Not a pong: `, msg);
-    return false;
+    // lastIndexOf from a fixed position scans only the head, without copying it.
+    if (
+      event.data.lastIndexOf('"type":"message"', DATA_FRAME_HEAD_LENGTH) === -1
+    ) {
+      return false;
+    }
+
+    return !filter(event.data, wsKey);
   }
 
   protected resolveEmittableEvents(
