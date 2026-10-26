@@ -5,6 +5,12 @@ import WebSocket from 'isomorphic-ws';
 import { APIRegion, RestClientOptions } from '../../lib/requestUtils.js';
 import type { WsKey } from '../../lib/websocket/websocket-util.js';
 
+/**
+ * Decides, from the raw frame text, whether a data push is parsed and emitted.
+ * Return `false` to drop it before any JSON parsing.
+ */
+export type WsDataMessageFilter = (rawMessage: string, wsKey: WsKey) => boolean;
+
 /** General configuration for the WebsocketClient */
 export interface WSClientConfigurableOptions {
   /** Your API key */
@@ -68,15 +74,14 @@ export interface WSClientConfigurableOptions {
   reauthWSAPIOnReconnect?: boolean;
 
   /**
-   * Optional filter applied to data pushes (`"type":"message"`) before they are parsed.
+   * Optional filter applied to data pushes (`"type":"message"`) before they are parsed,
+   * e.g. to drop symbols you do not track on an all-market topic such as
+   * `/market/ticker:all`. Parsing is the dominant per-message cost on busy topics.
    *
-   * Return `false` to drop the raw frame without JSON-parsing or emitting it, e.g. for
-   * symbols you do not track on an all-market topic such as `/market/ticker:all`.
-   * Parsing is the dominant per-message cost, so this saves CPU on busy topics.
-   *
-   * Control frames (welcome, ack, error, pong) never reach this filter.
+   * Control frames (welcome, ack, error, pong) never reach the filter, and if it throws
+   * the frame is processed as usual.
    */
-  dataMessageFilter?: (rawMessage: string, wsKey: WsKey) => boolean;
+  dataMessageFilter?: WsDataMessageFilter;
 }
 
 /**

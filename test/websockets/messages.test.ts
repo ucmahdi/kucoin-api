@@ -158,5 +158,49 @@ describe('KuCoin WebsocketClient message handling', () => {
       expect(filter).not.toHaveBeenCalled();
       expect(updates).toHaveLength(1);
     });
+
+    it('processes the frame as usual and logs when the filter throws', async () => {
+      const { client, updates } = build({
+        dataMessageFilter: () => {
+          throw new Error('filter blew up');
+        },
+      });
+      const error = jest.fn();
+      (client as unknown as { logger: Record<string, unknown> }).logger = {
+        trace: jest.fn(),
+        info: jest.fn(),
+        error,
+      };
+
+      await client.onWsMessage(frame(tickerAll('BTC-USDT')), WS_KEY, {});
+
+      expect(updates).toHaveLength(1);
+      expect(error).toHaveBeenCalledWith(
+        expect.stringContaining('isDiscardable'),
+        expect.objectContaining({
+          wsKey: WS_KEY,
+          exception: expect.any(Error),
+        }),
+      );
+    });
+
+    it('still processes the frame when the logger itself throws', async () => {
+      const { client, updates } = build({
+        dataMessageFilter: () => {
+          throw new Error('filter blew up');
+        },
+      });
+      (client as unknown as { logger: Record<string, unknown> }).logger = {
+        trace: jest.fn(),
+        info: jest.fn(),
+        error: () => {
+          throw new Error('logger blew up');
+        },
+      };
+
+      await client.onWsMessage(frame(tickerAll('BTC-USDT')), WS_KEY, {});
+
+      expect(updates).toHaveLength(1);
+    });
   });
 });
